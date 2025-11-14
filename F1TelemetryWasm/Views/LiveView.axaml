@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:viewModels="clr-namespace:F1TelemetryWasm.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+             x:Class="F1TelemetryWasm.Views.LiveView"
+             x:DataType="viewModels:LiveViewModel"
+             >
+    <StackPanel Spacing="10">
+        <lvc:CartesianChart Name="ThrottleChart" 
+            Height="300"
+            Margin="10"
+            Padding="10"
+            SyncContext="{Binding Sync}"
+            ZoomMode="X"
+            TooltipPosition="Hidden"
+            Series="{Binding ThrottleSeries}"
+            AnimationsSpeed="00:00:00" >
+            
+            <lvc:CartesianChart.XAxes>
+                <lvc:XamlAxis
+                    AnimationsSpeed="00:00:00"
+                    MinLimit="0"
+                    MaxLimit="{Binding RaceDistance}"
+                    PropertyChanged="BaseXamlAxis_OnPropertyChanged"
+                />
+            </lvc:CartesianChart.XAxes>
+            <lvc:CartesianChart.YAxes>
+                <lvc:XamlAxis MinLimit="0" MaxLimit="100" />
+            </lvc:CartesianChart.YAxes>
+        </lvc:CartesianChart>
+
+        <lvc:CartesianChart Name="BrakeChart"
+                            Height="300"
+                            SyncContext="{Binding Sync}"
+                            ZoomMode="X"
+                            TooltipPosition="Hidden"
+                            Series="{Binding BrakeSeries}"
+                            AnimationsSpeed="00:00:00.1" >
+            
+            <lvc:CartesianChart.XAxes>
+                <lvc:XamlAxis
+                    AnimationsSpeed="00:00:00.1"
+                    MinLimit="0"
+                    MaxLimit="{Binding RaceDistance}"
+                    PropertyChanged="BaseXamlAxis_OnPropertyChanged"
+                />
+            </lvc:CartesianChart.XAxes>
+            <lvc:CartesianChart.YAxes>
+                <lvc:XamlAxis MinLimit="0" MaxLimit="100" />
+            </lvc:CartesianChart.YAxes>
+        </lvc:CartesianChart>
+        <!--
+
+        <lvc:CartesianChart Height="200"
+                            SyncContext="{Binding Sync}"
+                            ZoomMode="X"
+                            TooltipPosition="Hidden"
+                            Series="{Binding ThrottleSeries}"
+                            AnimationsSpeed="00:00:00.1" >
+            
+            <lvc:CartesianChart.XAxes>
+                <lvc:XamlAxis
+                    AnimationsSpeed="00:00:00.1"
+                    MinLimit="0"
+                    MaxLimit="{Binding RaceDistance}"
+                />
+            </lvc:CartesianChart.XAxes>
+            <lvc:CartesianChart.YAxes>
+                <lvc:XamlAxis MinLimit="0" MaxLimit="100" />
+            </lvc:CartesianChart.YAxes>
+        </lvc:CartesianChart>
+        -->
+    </StackPanel>
+</UserControl>
