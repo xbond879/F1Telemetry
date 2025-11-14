@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -16,11 +17,8 @@ namespace F1TelemetryWasm.ViewModels;
 
 public class LiveViewModel : ObservableObject, IF1TelemetryConsumer
 {
-    ConcurrentQueue<BasePacketData> queue = new ConcurrentQueue<BasePacketData>();
-
     public LiveViewModel()
     {
-        Task.Run(ProcessQueue);
         ThrottleXAxes.First().PropertyChanged += OnAxisPropertyChanged;
         BrakeXAxes.First().PropertyChanged += OnAxisPropertyChanged;
         SpeedXAxes.First().PropertyChanged += OnAxisPropertyChanged;
@@ -227,31 +225,15 @@ public class LiveViewModel : ObservableObject, IF1TelemetryConsumer
         }
     ];
 
-    public void ReceivePacket(BasePacketData packet)
-    {
-        queue.Enqueue(packet);
-    }
-
-    private async Task ProcessQueue()
-    {
-        while (true)
-        {
-            while (queue.TryDequeue(out var packet))
-            {
-                ProcessPacket(packet);
-            }
-        }
-    }
-
     private double _currentDistance = -1;
     private double _lastDistance = -1;
-    private void ProcessPacket(BasePacketData packet)
+    public void ReceivePacket(BasePacketData packet)
     {
         switch (packet)
         {
             case PacketCarTelemetryData carTelemetryData:
                 if (_currentDistance < 0
-                    /*|| (_currentDistance > _lastDistance && _currentDistance - _lastDistance < 5)*/)
+                    || (_currentDistance > _lastDistance && _currentDistance - _lastDistance < 3))
                     return;
 
                 lock (Sync)
@@ -290,6 +272,7 @@ public class LiveViewModel : ObservableObject, IF1TelemetryConsumer
                             SpeedValuesBest.Add(new ObservablePoint(point.X, point.Y));
                         }
 
+                        Console.WriteLine(ThrottleValues.Count);
                         ThrottleValues.Clear();
                         BrakeValues.Clear();
                         SpeedValues.Clear();
