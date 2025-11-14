@@ -14,7 +14,7 @@ public class F1TelemetryListener(ILogger<F1TelemetryListener> logger, IF1Telemet
     {
         logger.LogInformation($"UDP Server starting on port {listenPort}...");
 
-        UdpClient listener = new UdpClient(listenPort);
+        var listener = new UdpClient(listenPort);
 
         logger.LogInformation($"UDP Server started, listening on port {listenPort}...");
         while (true)
