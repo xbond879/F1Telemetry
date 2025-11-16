@@ -8,7 +8,7 @@ public static class F1PackageParser
 {
     public static async Task<BasePacketData?> ParsePackage(byte[] data)
     {
-        //await File.WriteAllBytesAsync($"/home/bond/Work/F1/samples/{DateTime.Now.Ticks}",  data);
+        //await File.WriteAllBytesAsync($"/tmp/samples/{DateTime.Now.Ticks}",  data);
         try
         {
             using var ms = new MemoryStream(data);
@@ -26,12 +26,12 @@ public static class F1PackageParser
 
             switch (header.PacketId)
             {
-                //telemetry
-                case PacketTypes.CarTelemetry:
-                    return ParsePacket<PacketCarTelemetryData>(br, header);
-                // Lap Data
+                case PacketTypes.Session:
+                    return ParsePacket<PacketSessionData>(br, header);
                 case PacketTypes.LapData:
                     return ParsePacket<PacketLapData>(br, header);
+                case PacketTypes.CarTelemetry:
+                    return ParsePacket<PacketCarTelemetryData>(br, header);
                 default:
                     //Console.WriteLine($"Skipping packet of type {header.m_packetId}");
                     break;

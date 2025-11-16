@@ -9,28 +9,24 @@
              x:DataType="viewModels:LiveViewModel" >
 
     <StackPanel Spacing="5">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Current Lap: " />
+            <TextBlock Text="{Binding CurrentLap}"></TextBlock>
+            <TextBlock Text="; Best Lap Time: " />
+            <TextBlock Text="{Binding BestLapTime}"></TextBlock>
+        </StackPanel>
         <lvc:CartesianChart Name="ThrottleChart"
-            Height="300"
-            SyncContext="{Binding Sync}"
-            ZoomMode="X"
-            TooltipPosition="Hidden"
-            Series="{Binding ThrottleSeries}"
-            AnimationsSpeed="00:00:00" 
-            XAxes="{Binding ThrottleXAxes}"
-            YAxes="{Binding PercentYAxes}" />
-
-        <lvc:CartesianChart Name="BrakeChart"
-                            Height="300"
+                            MinHeight="250"
                             SyncContext="{Binding Sync}"
                             ZoomMode="X"
                             TooltipPosition="Hidden"
-                            Series="{Binding BrakeSeries}"
-                            AnimationsSpeed="00:00:00.1"
-                            XAxes="{Binding BrakeXAxes}"
+                            Series="{Binding ThrottleSeries}"
+                            AnimationsSpeed="00:00:00" 
+                            XAxes="{Binding ThrottleXAxes}"
                             YAxes="{Binding PercentYAxes}" />
 
         <lvc:CartesianChart Name="SpeedChart"
-                            Height="300"
+                            MinHeight="400"
                             SyncContext="{Binding Sync}"
                             ZoomMode="X"
                             TooltipPosition="Hidden"
@@ -38,5 +34,15 @@
                             AnimationsSpeed="00:00:00.1"
                             XAxes="{Binding SpeedXAxes}"
                             YAxes="{Binding SpeedYAxes}" />
+
+        <lvc:CartesianChart Name="BrakeChart"
+                            MinHeight="250"
+                            SyncContext="{Binding Sync}"
+                            ZoomMode="X"
+                            TooltipPosition="Hidden"
+                            Series="{Binding BrakeSeries}"
+                            AnimationsSpeed="00:00:00.1"
+                            XAxes="{Binding BrakeXAxes}"
+                            YAxes="{Binding PercentYAxes}" />
     </StackPanel>
 </UserControl>

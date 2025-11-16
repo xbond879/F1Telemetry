@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using F1TelemetryWasm;
 using F1TelemetryWasm.ViewModels;
 using F1UdpParser;
+using Microsoft.Extensions.Logging;
 
 namespace F1TelemetryDesktop;
 
@@ -18,7 +19,7 @@ class Program
         .StartWithClassicDesktopLifetime(args);
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
+    static AppBuilder BuildAvaloniaApp()
     {
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
@@ -26,12 +27,17 @@ class Program
             .LogToTrace()
             .AfterSetup(_ =>
             {
-                // This is where you might integrate with the Generic Host
+                using var loggerFactory = LoggerFactory.Create(builder =>
+                {
+                    builder.AddConsole();
+                    builder.SetMinimumLevel(LogLevel.Debug); 
+                });
+
                 var host = Host.CreateDefaultBuilder()
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddHostedService<F1TelemetryListener>();
-                        services.AddSingleton<IF1TelemetryConsumer>(new LiveViewModel());
+                        services.AddSingleton<IF1TelemetryConsumer>(new LiveViewModel(loggerFactory.CreateLogger<LiveViewModel>()));
                     })
                     .Build();
 
