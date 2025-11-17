@@ -28,7 +28,9 @@ public partial class LiveViewModel : ObservableObject, IF1TelemetryConsumer
 
     private const double AxisXOverflowLimit = 500;
     private const double AxisXRunningAheadSize = 50;
-    private const double AxisXRunningAheadThreshold = 1;
+    private const double AxisXRunningAheadThreshold = 30;
+    private const double ValuesDistanceThreshold = 0;
+    private const double LapCompleteDistanceTrashold = 100;
     private void OnAxisPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is not Axis axis)
@@ -273,7 +275,7 @@ public partial class LiveViewModel : ObservableObject, IF1TelemetryConsumer
             
             case PacketCarTelemetryData carTelemetryData:
                 if (_currentDistance < 0
-                    || (_currentDistance > _lastDistance && _currentDistance - _lastDistance < AxisXRunningAheadThreshold))
+                    || (_currentDistance > _lastDistance && _currentDistance - _lastDistance < ValuesDistanceThreshold))
                     return;
 
                 lock (Sync)
@@ -307,11 +309,11 @@ public partial class LiveViewModel : ObservableObject, IF1TelemetryConsumer
                             BrakeXAxes.First().SetLimits(0, _activeXZoom.Value);
                             SpeedXAxes.First().SetLimits(0, _activeXZoom.Value);
                         }
-
+                        
                         if (lapData.LastLapTimeInMs < _bestLapTimeInMs
                             && ThrottleValues.Any()
-                            && ThrottleValues.First().X < 10
-                            && ThrottleValues.Last().X + 10 > RaceDistance)
+                            && ThrottleValues.First().X < LapCompleteDistanceTrashold
+                            && ThrottleValues.Last().X + LapCompleteDistanceTrashold > RaceDistance)
                         {
                             _logger.LogInformation("Last lap was the best! Saving...");
                             _bestLapTimeInMs = lapData.LastLapTimeInMs;
