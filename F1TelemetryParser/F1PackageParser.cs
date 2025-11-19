@@ -14,9 +14,9 @@ public static class F1PackageParser
             using var ms = new MemoryStream(data);
             using var br = new BinaryReader(ms, Encoding.Default);
 
-            FieldInfo[] headerFields = typeof(PacketHeader).GetFields(BindingFlags.Instance | BindingFlags.Public);
+            var headerFields = typeof(PacketHeader).GetFields(BindingFlags.Instance | BindingFlags.Public);
             var header = new PacketHeader();
-            foreach (FieldInfo field in headerFields)
+            foreach (var field in headerFields)
             {
                 if (!TryReadByType(field.FieldType, br, value => field.SetValue(header, value)))
                 {

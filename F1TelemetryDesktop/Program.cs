@@ -27,17 +27,15 @@ class Program
             .LogToTrace()
             .AfterSetup(_ =>
             {
-                using var loggerFactory = LoggerFactory.Create(builder =>
-                {
-                    builder.AddConsole();
-                    builder.SetMinimumLevel(LogLevel.Debug); 
-                });
-
                 var host = Host.CreateDefaultBuilder()
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddHostedService<F1TelemetryListener>();
-                        services.AddSingleton<IF1TelemetryConsumer>(new LiveViewModel(loggerFactory.CreateLogger<LiveViewModel>()));
+                        services.AddSingleton<IF1TelemetryConsumer>(new LiveViewModel(LoggerFactory.Create(builder =>
+                        {
+                            builder.AddConsole();
+                            builder.SetMinimumLevel(LogLevel.Debug); 
+                        }).CreateLogger<LiveViewModel>()));
                     })
                     .Build();
 
