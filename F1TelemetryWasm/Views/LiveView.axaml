@@ -6,43 +6,17 @@
              xmlns:viewModels="clr-namespace:F1TelemetryWasm.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
              x:Class="F1TelemetryWasm.Views.LiveView"
-             x:DataType="viewModels:LiveViewModel" >
+             x:DataType="viewModels:LiveViewModel"
+             DataContextChanged="StyledElement_OnDataContextChanged" >
 
-    <StackPanel Spacing="5">
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Current Lap: " />
-            <TextBlock Text="{Binding CurrentLap}"></TextBlock>
-            <TextBlock Text="; Best Lap Time: " />
-            <TextBlock Text="{Binding BestLapTime}"></TextBlock>
-        </StackPanel>
-        <lvc:CartesianChart Name="ThrottleChart"
-                            MinHeight="250"
-                            SyncContext="{Binding Sync}"
-                            ZoomMode="X"
-                            TooltipPosition="Hidden"
-                            Series="{Binding ThrottleSeries}"
-                            AnimationsSpeed="00:00:00" 
-                            XAxes="{Binding ThrottleXAxes}"
-                            YAxes="{Binding PercentYAxes}" />
-
-        <lvc:CartesianChart Name="SpeedChart"
-                            MinHeight="400"
-                            SyncContext="{Binding Sync}"
-                            ZoomMode="X"
-                            TooltipPosition="Hidden"
-                            Series="{Binding SpeedSeries}"
-                            AnimationsSpeed="00:00:00.1"
-                            XAxes="{Binding SpeedXAxes}"
-                            YAxes="{Binding SpeedYAxes}" />
-
-        <lvc:CartesianChart Name="BrakeChart"
-                            MinHeight="250"
-                            SyncContext="{Binding Sync}"
-                            ZoomMode="X"
-                            TooltipPosition="Hidden"
-                            Series="{Binding BrakeSeries}"
-                            AnimationsSpeed="00:00:00.1"
-                            XAxes="{Binding BrakeXAxes}"
-                            YAxes="{Binding PercentYAxes}" />
+    <StackPanel Spacing="5" Name="MainStack">
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Current Lap: " />
+                <TextBlock Text="{Binding LapData.CurrentLap}"></TextBlock>
+                <TextBlock Text="; Best Lap Time: " />
+                <TextBlock Text="{Binding LapData.BestLapTime, StringFormat='mm\\:ss\\.fff'}"></TextBlock>
+            </StackPanel>
+        </Grid>
     </StackPanel>
 </UserControl>

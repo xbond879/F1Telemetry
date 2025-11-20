@@ -3,9 +3,9 @@ using System;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using F1TelemetryWasm;
+using F1TelemetryWasm.Models;
 using F1TelemetryWasm.ViewModels;
 using F1UdpParser;
-using Microsoft.Extensions.Logging;
 
 namespace F1TelemetryDesktop;
 
@@ -31,11 +31,10 @@ class Program
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddHostedService<F1TelemetryListener>();
-                        services.AddSingleton<IF1TelemetryConsumer>(new LiveViewModel(LoggerFactory.Create(builder =>
-                        {
-                            builder.AddConsole();
-                            builder.SetMinimumLevel(LogLevel.Debug); 
-                        }).CreateLogger<LiveViewModel>()));
+                        services.AddSingleton<IF1TelemetryConsumer, LiveViewModel>();
+                        services.AddSingleton<LapData>();
+                        services.AddSingleton<LiveViewConfig>();
+                        services.AddSingleton<DataUpdateSyncRoot>();
                     })
                     .Build();
 
