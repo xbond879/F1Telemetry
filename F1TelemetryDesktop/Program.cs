@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using System;
+using F1TelemetryStorage;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using F1TelemetryWasm;
@@ -35,6 +36,8 @@ class Program
                         services.AddSingleton<LapData>();
                         services.AddSingleton<LiveViewConfig>();
                         services.AddSingleton<DataUpdateSyncRoot>();
+                        services.AddSingleton<ITelemetryStorage, LiteDbStorage>();
+                        services.AddAutoMapper(cfg => cfg.AddProfile<AppMappingProfile>());
                     })
                     .Build();
 

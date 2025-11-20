@@ -7,9 +7,9 @@ public class PacketSessionData : BasePacketData
     public sbyte    AirTemperature;      	// Air temp. in degrees celsius
     public byte     TotalLaps;           	// Total number of laps in this race
     public ushort   TrackLength;           	// Track length in metres
-    /*
     public byte     SessionType;         	// 0 = unknown, see appendix
     public sbyte    TrackId;         		// -1 for unknown, see appendix
+    /*
     public byte     Formula;                  	// Formula, 0 = F1 Modern, 1 = F1 Classic, 2 = F2, 3 = F1 Generic, 4 = Beta, 6 = Esports 8 = F1 World, 9 = F1 Elimination
     public ushort   SessionTimeLeft;    	// Time left in session in seconds
     public ushort   SessionDuration;     	// Session duration in seconds
@@ -81,4 +81,13 @@ public class PacketSessionData : BasePacketData
     public float    Sector2LapDistanceStart;          // Distance in m around track where sector 2 starts
     public float    Sector3LapDistanceStart;          // Distance in m around track where sector 3 starts
     */
+    
+    public bool SessionEquals(PacketSessionData? other)
+    {
+        return other != null &&
+            TrackId == other.TrackId
+            && SessionType == other.SessionType
+            //&& Weather == other.Weather
+            ;
+    }
 }

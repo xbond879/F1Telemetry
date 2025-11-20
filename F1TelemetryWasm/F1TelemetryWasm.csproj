@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="15.1.0" />
         <PackageReference Include="Avalonia" Version="11.0.6"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.0.6"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6"/>
@@ -31,5 +32,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\F1TelemetryParser\F1TelemetryParser.csproj" />
+      <ProjectReference Include="..\F1TelemetryStorage\F1TelemetryStorage.csproj" />
     </ItemGroup>
 </Project>

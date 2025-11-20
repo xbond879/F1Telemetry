@@ -1,16 +1,20 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
+using F1TelemetryStorage;
+using F1TelemetryStorage.Models;
 using F1UdpParser.Models;
 using LiveChartsCore.Defaults;
 using Microsoft.Extensions.Logging;
 
 namespace F1TelemetryWasm.Models;
 
-public partial class LapData(ILogger<LapData> logger) : ObservableObject
+public partial class LapData(ILogger<LapData> logger, ITelemetryStorage storage, IMapper mapper) : ObservableObject
 {
     public double RaceDistance { get; private set; } = 10000;
+    public PacketSessionData SessionData { get; private set; }
 
     [ObservableProperty]
     private double _currentDistance = -1;
@@ -23,10 +27,10 @@ public partial class LapData(ILogger<LapData> logger) : ObservableObject
     [ObservableProperty]
     private TimeSpan _bestLapTime;
     private uint _bestLapTimeInMsValue = int.MaxValue;
-    private uint BestLapTimeInMs
+    public uint BestLapTimeInMs
     {
         get => _bestLapTimeInMsValue;
-        set
+        private set
         {
             BestLapTime = new TimeSpan(0, 0, 0, 0, (int)value);
             _bestLapTimeInMsValue = value;
@@ -70,6 +74,17 @@ public partial class LapData(ILogger<LapData> logger) : ObservableObject
         switch (packet)
         {
             case PacketSessionData sessionData:
+                if (!sessionData.SessionEquals(SessionData))
+                {
+                    var data = storage.Load(sessionData.TrackId, sessionData.SessionType);
+                    if (data != null)
+                    {
+                        logger.LogInformation($"Saved session found. Applying telemetry with time {data.BestLapTimeInMs} ms");
+                        mapper.Map(data,this);
+                    }
+                }
+
+                SessionData = sessionData;
                 RaceDistance = sessionData.TrackLength;
                 return true;
             
@@ -94,9 +109,8 @@ public partial class LapData(ILogger<LapData> logger) : ObservableObject
                     {
                         CurrentLap = lapData.CurrentLapNum;
                         logger.LogInformation($"Lap {lapData.CurrentLapNum} started.");
-                        logger.LogInformation($"{ThrottleValues.Count} {BrakeValues.Count} {SpeedValues.Count}");
 
-                        if (lapData.LastLapTimeInMs < BestLapTimeInMs
+                        if ((BestLapTimeInMs == 0 || lapData.LastLapTimeInMs < BestLapTimeInMs)
                             && ThrottleValues.Any()
                             && ThrottleValues.First().X < 10
                             && ThrottleValues.Last().X + 10 > RaceDistance)
@@ -127,6 +141,9 @@ public partial class LapData(ILogger<LapData> logger) : ObservableObject
                         ThrottleValues.Clear();
                         BrakeValues.Clear();
                         SpeedValues.Clear();
+
+                        var data = mapper.Map<LapTelemetryData>(this);
+                        storage.Save(data);
                     }
                 }
                 else if (CurrentDistance > lapData.LapDistance)
