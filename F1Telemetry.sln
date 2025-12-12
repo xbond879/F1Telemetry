@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F1TelemetryWasm", "F1Teleme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F1TelemetryStorage", "F1TelemetryStorage\F1TelemetryStorage.csproj", "{EB659420-B41E-40AC-9751-5F00C00D1CCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "F1TelemetryOverlay", "F1TelemetryOverlay\F1TelemetryOverlay.csproj", "{39363348-A8B1-4E85-B49B-3050B251285A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{EB659420-B41E-40AC-9751-5F00C00D1CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB659420-B41E-40AC-9751-5F00C00D1CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB659420-B41E-40AC-9751-5F00C00D1CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39363348-A8B1-4E85-B49B-3050B251285A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39363348-A8B1-4E85-B49B-3050B251285A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39363348-A8B1-4E85-B49B-3050B251285A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39363348-A8B1-4E85-B49B-3050B251285A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -19,7 +19,7 @@ public class F1TelemetryListener(ILogger<F1TelemetryListener> logger, IF1Telemet
         logger.LogInformation($"UDP Server started, listening on port {listenPort}...");
         while (true)
         {
-            UdpReceiveResult udpData = await listener.ReceiveAsync(stoppingToken);
+            var udpData = await listener.ReceiveAsync(stoppingToken);
             if (stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("MyBackgroundService is stopping at: {time}", DateTimeOffset.Now);
