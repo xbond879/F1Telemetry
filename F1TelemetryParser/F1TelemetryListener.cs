@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace F1UdpParser;
 
-public class F1TelemetryListener(ILogger<F1TelemetryListener> logger, IF1TelemetryConsumer receiver) : BackgroundService
+public class F1TelemetryListener(ILogger<F1TelemetryListener> logger, IF1TelemetryConsumer? receiver) : BackgroundService
 {
     private const int DefaultListenPort = 20777;
     
@@ -38,7 +38,7 @@ public class F1TelemetryListener(ILogger<F1TelemetryListener> logger, IF1Telemet
     {
         await foreach (var data in Start(stoppingToken))
         {
-            receiver.ReceivePacket(data);
+            receiver?.ReceivePacket(data);
         }
     }
 }

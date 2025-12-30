@@ -9,7 +9,6 @@ public class PacketSessionData : BasePacketData
     public ushort   TrackLength;           	// Track length in metres
     public byte     SessionType;         	// 0 = unknown, see appendix
     public sbyte    TrackId;         		// -1 for unknown, see appendix
-    /*
     public byte     Formula;                  	// Formula, 0 = F1 Modern, 1 = F1 Classic, 2 = F2, 3 = F1 Generic, 4 = Beta, 6 = Esports 8 = F1 World, 9 = F1 Elimination
     public ushort   SessionTimeLeft;    	// Time left in session in seconds
     public ushort   SessionDuration;     	// Session duration in seconds
@@ -19,6 +18,7 @@ public class PacketSessionData : BasePacketData
     public byte     SpectatorCarIndex;  	// Index of the car being spectated
     public byte     SliProNativeSupport;	// SLI Pro support, 0 = inactive, 1 = active
     public byte     NumMarshalZones;         	// Number of marshal zones to follow
+/*
     public MarshalZone[]    MarshalZones;         	// List of marshal zones – max 21
     public byte     SafetyCarStatus;           // 0 = no safety car, 1 = full, 2 = virtual, 3 = formation lap
     public byte     NetworkGame;               // 0 = offline, 1 = online

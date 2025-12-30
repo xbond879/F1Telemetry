@@ -29,9 +29,9 @@ public static class F1PackageParser
                 case PacketTypes.Session:
                     return ParsePacket<PacketSessionData>(br, header);
                 case PacketTypes.LapData:
-                    return ParsePacket<PacketLapData>(br, header);
+                    return ParsePacket<PacketLapData>(br, header, header.PlayerCarIndex);
                 case PacketTypes.CarTelemetry:
-                    return ParsePacket<PacketCarTelemetryData>(br, header);
+                    return ParsePacket<PacketCarTelemetryData>(br, header, header.PlayerCarIndex);
                 default:
                     //Console.WriteLine($"Skipping packet of type {header.m_packetId}");
                     break;
@@ -44,10 +44,17 @@ public static class F1PackageParser
         return null;
     }
 
-    private static T ParsePacket<T>(BinaryReader br, PacketHeader header) where T : BasePacketData, new()
+    private static T ParsePacket<T>(BinaryReader br, PacketHeader header, byte playerCarIndex = 0) where T : BasePacketData, new()
     {
         var result = new T() { Header = header};
         var telemetryFields = typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public);
+        while (playerCarIndex-- > 0)
+        {
+            foreach (var field in telemetryFields.Where(f => f.FieldType.Namespace == "System"))
+            {
+                TryReadByType(field.FieldType, br, _ => { });
+            }
+        }
         foreach (var field in telemetryFields.Where(f => f.FieldType.Namespace == "System"))
         {
             TryReadByType(field.FieldType, br, (val) => field.SetValue(result, val));
@@ -64,11 +71,17 @@ public static class F1PackageParser
                 case "Byte":
                     setter(br.ReadByte());
                     break;
+                case "Byte[]":
+                    setter(new [] { br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte()});
+                    break;
                 case "SByte":
                     setter(br.ReadSByte());
                     break;
                 case "UInt16":
                     setter(br.ReadUInt16());
+                    break;
+                case "UInt16[]":
+                    setter(new [] { br.ReadUInt16(), br.ReadUInt16(), br.ReadUInt16(), br.ReadUInt16()});
                     break;
                 case "UInt32":
                     setter(br.ReadUInt32());
@@ -78,6 +91,9 @@ public static class F1PackageParser
                     break;
                 case "Single":
                     setter(br.ReadSingle());
+                    break;
+                case "Single[]":
+                    setter(new [] { br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle()});
                     break;
                 default:
                     if (fieldFieldType.IsEnum)

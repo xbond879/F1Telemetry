@@ -12,12 +12,10 @@ public class PacketCarTelemetryData : BasePacketData
     public byte   Drs;                      // 0 = off, 1 = on
     public byte   RevLightsPercent;         // Rev lights indicator (percentage)
     public ushort RevLightsBitValue;        // Rev lights (bit 0 = leftmost LED, bit 14 = rightmost LED)
-    /* //Arrays not supported yet
     public ushort[] BrakesTemperature;     // Brakes temperature (celsius)
     public byte[]   TyresSurfaceTemperature; // Tyres surface temperature (celsius)
     public byte[]   TyresInnerTemperature; // Tyres inner temperature (celsius)
     public ushort   EngineTemperature;        // Engine temperature (celsius)
     public float[]  TyresPressure;         // Tyres pressure (PSI)
     public byte[]   SurfaceType;           // Driving surface, see appendices
-    */
 }
